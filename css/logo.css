@@ -1,0 +1,20 @@
+/* 主题logo切换 */
+:root[data-theme="light"] .theme-logo-light {
+    opacity: 1;
+    z-index: 2;
+}
+
+:root[data-theme="light"] .theme-logo-dark {
+    opacity: 0;
+    z-index: 1;
+}
+
+:root[data-theme="dark"] .theme-logo-light {
+    opacity: 0;
+    z-index: 1;
+}
+
+:root[data-theme="dark"] .theme-logo-dark {
+    opacity: 1;
+    z-index: 2;
+} 

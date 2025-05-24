@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en" style="box-sizing: border-box; overflow-x: hidden;">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="John Doe">
+<meta name="generator" content="Hexo">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.ico"> 
+<!-- Theme meta tag -->
+<meta name="color-scheme" content="light dark">
+<title>AEROSPACEKID</title>
+<!-- Theme Style -->
+
+<link rel="stylesheet" href="/css/style.css">
+
+<!-- Logo CSS removed as we're now using text instead of images -->
+
+<!-- Open Graph 协议 -->
+<meta property="og:title" content="AEROSPACEKID">
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://example.com">
+<meta property="og:description" content=""> 
+    <!-- Theme detection script - must be first -->
+    <script>
+        (function() {
+            // Function to check if current time is between 7am and 8pm
+            function isDayTime() {
+                const hour = new Date().getHours();
+                return hour >= 7 && hour < 20; // 7am to 8pm
+            }
+            
+            // Get theme from localStorage or use auto based on time
+            const savedThemePreference = localStorage.getItem('themePreference') || 'auto';
+            
+            // If auto preference or no preference saved, set theme based on time
+            if (savedThemePreference === 'auto') {
+                const autoTheme = isDayTime() ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', autoTheme);
+                localStorage.setItem('theme', autoTheme);
+            } else {
+                // Use the saved theme if user has manually set a preference
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        })();
+    </script>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <!-- Font Awesome via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* 全局盒模型规则 */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* 基础颜色变量 */
+            --bg-color: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-color: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --highlight-color: var(--custom-blue);
+            --highlight-color-rgb: 0, 102, 204; /* Deep Blue */
+            --accent-color: var(--custom-red);
+            --accent-color-rgb: 220, 38, 38; /* Rose Red */
+            --custom-blue: #0066cc; /* Deep Blue */
+            --custom-red: #dc2626; /* Rose Red */
+            --icon-color: var(--highlight-color);
+            --tech-bg: rgba(var(--highlight-color-rgb), 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-color: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --highlight-color-rgb: 0, 102, 204; /* Deep Blue */
+            --accent-color-rgb: 220, 38, 38; /* Rose Red */
+            --icon-color: #ffffff;
+            --tech-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 闪电效果样式 */
+        #lightning-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightning-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .lightning-path {
+            stroke: var(--accent-color);
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            opacity: 0.8;
+        }
+
+        .lightning-1 {
+            animation: lightning 2s linear forwards;
+            animation-delay: 0.1s;
+        }
+
+        .lightning-2 {
+            animation: lightning 2s linear forwards;
+            animation-delay: 0.2s;
+        }
+
+        .lightning-3 {
+            animation: lightning 2s linear forwards;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes lightning {
+            0% {
+                stroke-dashoffset: 500;
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            20% {
+                stroke-dashoffset: 0;
+            }
+            60% {
+                opacity: 0.8;
+            }
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 0;
+            }
+        }
+
+        /* 页面过渡效果 */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 导航栏样式 */
+        .nav-bg {
+            background-color: var(--bg-card);
+            border-color: var(--border-color);
+        }
+
+        /* Logo 动画 */
+        .logo-text {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .logo-letter {
+            display: inline-block;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        a:hover .logo-letter {
+            color: var(--highlight-color);
+            transform: translateY(-2px);
+            transition-delay: calc(var(--index) * 0.05s);
+        }
+
+        /* 高亮文本 */
+        .text-highlight {
+            color: var(--icon-color);
+        }
+
+        /* 链接高亮效果 */
+        .highlight-hover-text {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .highlight-hover-text:hover {
+            color: var(--highlight-color);
+        }
+
+        /* 主题切换图标 */
+        .theme-toggle i {
+            transition: transform 0.5s ease;
+        }
+
+        .theme-toggle:hover i {
+            transform: rotate(180deg);
+        }
+
+        /* 加载动画 */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(var(--highlight-color-rgb), 0.3);
+            border-radius: 50%;
+            border-top-color: var(--highlight-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--text-secondary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--text-color);
+        }
+
+        /* iOS Safari specific CSS */
+        @supports (-webkit-touch-callout: none) {
+            .min-h-screen {
+                min-height: -webkit-fill-available;
+            }
+        }
+        
+        /* TikTok-style flashing effect for logo text */
+        .logo-text {
+            position: relative;
+            display: inline-block;
+            letter-spacing: -1px; /* Even tighter letter spacing */
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+        }
+        
+        .logo-letter {
+            display: inline-block;
+            position: relative;
+            transition: color 0.1s ease; /* Faster transition for sharper effect */
+            margin: 0;
+            padding: 0;
+        }
+        
+        @keyframes tiktokFlash {
+            0%, 100% {
+                color: var(--text-primary);
+                text-shadow: none;
+                transform: scale(1);
+            }
+            10% { /* Shorter flash duration */
+                color: var(--highlight-color);
+                text-shadow: 0 0 10px var(--highlight-color);
+                transform: scale(1.05); /* Subtle scale effect */
+            }
+        }
+        
+        /* Apply animation with different delays to create the sequential effect */
+        .logo-letter:nth-child(1) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.0s; }
+        .logo-letter:nth-child(2) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.15s; }
+        .logo-letter:nth-child(3) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.3s; }
+        .logo-letter:nth-child(4) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.45s; }
+        .logo-letter:nth-child(5) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.6s; }
+        .logo-letter:nth-child(6) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.75s; }
+        .logo-letter:nth-child(7) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.9s; }
+        .logo-letter:nth-child(8) { animation: tiktokFlash 1.8s infinite; animation-delay: 1.05s; }
+        .logo-letter:nth-child(9) { animation: tiktokFlash 1.8s infinite; animation-delay: 1.2s; }
+        .logo-letter:nth-child(10) { animation: tiktokFlash 1.8s infinite; animation-delay: 1.35s; }
+        .logo-letter:nth-child(11) { animation: tiktokFlash 1.8s infinite; animation-delay: 1.5s; }
+
+        /* 深色模式底部导航栏样式 */
+        [data-theme="dark"] [data-theme-switch] {
+            background-color: rgba(0, 0, 0, 0.7) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        
+        [data-theme="dark"] .dark-mode-icon {
+            color: white !important;
+        }
+        
+        [data-theme="dark"] .dark-mode-divider {
+            background-color: rgba(255, 255, 255, 0.3) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+    <!-- Page transition overlay -->
+    <div id="page-transition-overlay" class="fixed inset-0 z-[9999] pointer-events-none flex items-center justify-center transition-opacity duration-300" style="background-color: var(--bg-color); opacity: 0;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- 底部悬浮导航栏 -->
+    <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center items-center p-4" id="bottom-nav">
+        <div class="flex items-center gap-3 px-6 py-3 shadow-lg rounded-full backdrop-blur-md" style="background-color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0, 0, 0, 0.1);" data-theme-switch>
+            <a href="/" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-800 dark-mode-icon">
+                <i class="fas fa-home"></i>
+            </a>
+            <a target="_blank" rel="noopener" href="https://719520.xyz" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-800 dark-mode-icon">
+                <i class="fas fa-archive"></i>
+            </a>
+            <button id="copy-wechat" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-800 dark-mode-icon bg-transparent border-0">
+                <i class="fab fa-weixin"></i>
+            </button>
+            
+            <div class="mx-1 h-5 w-px bg-gray-300 dark-mode-divider"></div>
+            
+            <button onclick="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-800 dark-mode-icon theme-toggle bg-transparent border-0">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button id="back-to-top" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-800 dark-mode-icon bg-transparent border-0">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 闪电效果容器 -->
+    <div id="lightning-container" class="fixed inset-0 pointer-events-none z-[9998]" style="opacity: 0;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" class="lightning-svg">
+            <path class="lightning-path lightning-1" d="M300,20 L290,100 L320,110 L280,220 L310,140 L270,130 L300,20" fill="none" stroke-width="3" stroke-linecap="round" />
+            <path class="lightning-path lightning-2" d="M500,50 L480,130 L510,140 L460,250 L490,160 L450,150 L500,50" fill="none" stroke-width="3" stroke-linecap="round" />
+            <path class="lightning-path lightning-3" d="M150,80 L170,140 L140,150 L190,250 L165,170 L195,160 L150,80" fill="none" stroke-width="2" stroke-linecap="round" />
+        </svg>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="flex-grow container mx-auto px-4 pb-4 md:px-8 md:pb-8" style="margin-top: 20px;">
+        <!-- 使用与首页相同的文章卡片样式 -->
+<!-- Preload critical resources -->
+<link rel="preload" href="/mactowin/styles.css" as="style">
+
+<!-- 載入樣式 -->
+<link rel="stylesheet" href="/mactowin/styles.css">
+
+<style>
+/* 覆蓋某些樣式以整合到主題 */
+main.flex-grow.container {
+    padding-top: 0 !important;
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.header {
+    text-align: center;
+    padding: 24px 16px;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 0;
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 12px;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.header p {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* 確保導航欄文字在淺色模式下的可讀性 */
+body:not([data-theme="dark"]) nav.nav-bg a,
+body:not([data-theme="dark"]) nav.nav-bg .text-primary,
+:root:not([data-theme="dark"]) nav.nav-bg a,
+:root:not([data-theme="dark"]) nav.nav-bg .text-primary {
+    color: var(--highlight-color) !important;
+    text-shadow: 0 0 1px rgba(0,0,0,0.1);
+}
+
+/* 修改 bento-grid 佈局，以匹配圖片中的卡片佈局 */
+.bento-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: var(--bg-color);
+}
+
+/* 按照圖片中的響應式佈局調整 */
+@media (min-width: 640px) {
+    .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .bento-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+}
+
+/* 設置較大的卡片跨兩列 */
+.card-wide {
+    grid-column: span 1;
+}
+
+@media (min-width: 640px) {
+    .card-wide {
+        grid-column: span 2 !important;
+    }
+}
+
+/* 添加col-span-2類以支持與mactowin頁面相同的樣式 */
+.col-span-2 {
+    grid-column: span 1;
+}
+
+@media (min-width: 640px) {
+    .col-span-2 {
+        grid-column: span 2;
+    }
+}
+
+/* 根據圖片調整卡片樣式 */
+.card {
+    position: relative;
+    height: 100%;
+    transition: all 0.25s;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.card:hover {
+    box-shadow: 0 15px 30px -5px var(--hover-shadow);
+    transform: translateY(-2px);
+}
+
+/* 添加持久悬停卡片的样式 */
+.card.persistent-hover {
+    box-shadow: 0 10px 25px -5px var(--hover-shadow);
+    transform: translateY(-2px);
+}
+
+.card.persistent-hover .card-pattern,
+.card.persistent-hover .card-border {
+    opacity: 1;
+}
+
+.card-header {
+    position: relative;
+    padding: 16px;
+}
+
+.card-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icon-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--icon-bg);
+}
+
+.status-badge {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background-color: var(--card-tag-bg);
+    color: var(--text-muted);
+}
+
+.card-content {
+    position: relative;
+    padding: 0 16px 16px;
+    flex: 1;
+}
+
+.card-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-color);
+    line-height: 1.3;
+    margin-bottom: 10px;
+}
+
+.card-meta {
+    margin-left: 8px;
+    font-size: 13px;
+    color: var(--text-light);
+    font-weight: 400;
+}
+
+.card-description {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    font-weight: 400;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.card-footer {
+    position: relative;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    border-top: none;
+}
+
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.card-tag {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background-color: var(--card-tag-bg);
+    color: var(--text-light);
+}
+
+/* 卡片底部圖案 */
+.card-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background-image: radial-gradient(circle at center, rgba(0,0,0,0.025) 1px, transparent 1px);
+    background-size: 8px 8px;
+    z-index: 0;
+}
+
+.card:hover .card-pattern {
+    opacity: 1;
+}
+
+/* 卡片底部邊框 */
+.card-border {
+    position: absolute;
+    inset: 0;
+    z-index: -10;
+    border-radius: 16px;
+    padding: 1px;
+    background: linear-gradient(to bottom right, transparent, var(--via-color), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.card:hover .card-border {
+    opacity: 1;
+}
+
+/* 年份標題樣式 */
+.year-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    grid-column: 1 / -1;
+}
+
+/* 不同文章卡片的图标颜色 */
+.card[data-index="0"] .icon-wrapper i { color: #3b82f6; }
+.card[data-index="1"] .icon-wrapper i { color: #10b981; }
+.card[data-index="2"] .icon-wrapper i { color: #f59e0b; }
+.card[data-index="3"] .icon-wrapper i { color: #ef4444; }
+.card[data-index="4"] .icon-wrapper i { color: #8b5cf6; }
+.card[data-index="5"] .icon-wrapper i { color: #ec4899; }
+.card[data-index="6"] .icon-wrapper i { color: #14b8a6; }
+
+/* 新的分页控制器样式，与首页一致 */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    background-color: var(--card-bg);
+}
+
+:root[data-theme="dark"] .pagination-container {
+    background-color: #000 !important;
+}
+
+.pagination-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+:root[data-theme="dark"] .pagination-pill {
+    background-color: rgba(30, 30, 30, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+.pagination-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+:root[data-theme="dark"] .pagination-icon {
+    color: white !important;
+}
+
+.pagination-icon:hover {
+    background-color: var(--highlight-color);
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+:root[data-theme="dark"] .pagination-text {
+    color: white !important;
+}
+
+.pagination-page {
+    font-weight: 700;
+}
+
+.pagination-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+</style>
+
+<div class="header">
+    <h1>Archives</h1>
+    <p>Total 3 posts, browse all articles by year.</p>
+</div>
+
+
+
+<div class="bento-grid">
+    
+        <h2 class="year-title">2025</h2>
+        
+        
+            <a href="/2025/05/19/%E7%9C%8B%E7%9C%8B%E4%BD%8D%E7%BD%AE/" class="card-link col-span-2 card-wide">
+                <div class="card persistent-hover" data-index="0">
+                    <div class="card-pattern"></div>
+                    
+                    <div class="card-header">
+                        <div class="card-header-content">
+                            <div class="icon-wrapper">
+                                <i class='fas fa-newspaper' style="font-size: 16px;"></i>
+                            </div>
+                            <span class="status-badge">May 2025</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <h3 class="card-title">
+                            看看位置
+                            
+                        </h3>
+                        <p class="card-description">
+                            
+                                ...
+                            
+                        </p>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="card-tags">
+                            
+                                <span class="card-tag">#Blog</span>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="card-border"></div>
+                </div>
+            </a>
+        
+            <a href="/2025/05/19/xinghuo/" class="card-link ">
+                <div class="card " data-index="1">
+                    <div class="card-pattern"></div>
+                    
+                    <div class="card-header">
+                        <div class="card-header-content">
+                            <div class="icon-wrapper">
+                                <i class='fas fa-book' style="font-size: 16px;"></i>
+                            </div>
+                            <span class="status-badge">May 2025</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <h3 class="card-title">
+                            xinghuo
+                            
+                        </h3>
+                        <p class="card-description">
+                            
+                                ...
+                            
+                        </p>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="card-tags">
+                            
+                                <span class="card-tag">#Blog</span>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="card-border"></div>
+                </div>
+            </a>
+        
+    
+        <h2 class="year-title">2023</h2>
+        
+        
+            <a href="/2023/05/19/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0%E6%91%98%E8%A6%81/" class="card-link col-span-2 card-wide">
+                <div class="card persistent-hover" data-index="0">
+                    <div class="card-pattern"></div>
+                    
+                    <div class="card-header">
+                        <div class="card-header-content">
+                            <div class="icon-wrapper">
+                                <i class='fas fa-newspaper' style="font-size: 16px;"></i>
+                            </div>
+                            <span class="status-badge">May 2023</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-content">
+                        <h3 class="card-title">
+                            测试文章摘要
+                            
+                        </h3>
+                        <p class="card-description">
+                            
+                                这是文章摘要部分，会显示在首页的卡片中。这部分内容应该简洁明了，概括文章的主要内容。...
+                            
+                        </p>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="card-tags">
+                            
+                                
+                                    <span class="card-tag">#测试</span>
+                                
+                                    <span class="card-tag">#摘要</span>
+                                
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="card-border"></div>
+                </div>
+            </a>
+        
+    
+</div>
+
+
+
+
+
+<script>
+// 確保頁面完全載入後執行
+document.addEventListener('DOMContentLoaded', function() {
+    // 確保導航欄文字顏色正確
+    const navElement = document.querySelector('nav');
+    if (navElement && !navElement.classList.contains('nav-bg')) {
+        navElement.classList.add('nav-bg');
+    }
+    
+    // 確保主容器樣式正確
+    const mainContainer = document.querySelector('main.flex-grow.container');
+    if (mainContainer) {
+        mainContainer.style.paddingTop = '0';
+        mainContainer.style.maxWidth = '100%';
+        mainContainer.style.paddingLeft = '0';
+        mainContainer.style.paddingRight = '0';
+    }
+    
+    // 確保寬卡片在小螢幕上也能正確顯示
+    function adjustCardLayout() {
+        const wideCards = document.querySelectorAll('.card-wide, .col-span-2');
+        const isMobile = window.innerWidth < 640;
+        
+        wideCards.forEach(card => {
+            if (isMobile) {
+                card.style.gridColumn = 'span 1';
+            } else {
+                card.style.gridColumn = 'span 2';
+            }
+        });
+    }
+    
+    // 初始調整和視窗大小變化時調整
+    adjustCardLayout();
+    window.addEventListener('resize', adjustCardLayout);
+});
+</script> 
+    </div>
+
+    <!-- 页脚 - 添加底部padding以避免内容被导航栏遮挡 -->
+    <footer class="py-6 pb-20 border-t mt-8" style="border-color: var(--border-color);">
+        <div class="container mx-auto px-4 flex flex-col items-center">
+            <p class="text-center text-sm text-secondary mb-1">
+                &copy; 2025 Rick's Blog. Powered by Hexo&Rick
+            </p>
+        </div>
+    </footer>
+
+    <!-- 主題切換通知容器 - 預先創建 -->
+    <div id="theme-notification" class="fixed opacity-0 transition-opacity duration-300" style="bottom: 100px; right: 20px; padding: 8px 16px; border-radius: 4px; z-index: 9999; font-size: 14px; display: none;"></div>
+    
+    <!-- Custom JS -->
+    <script src="/js/script.js" defer></script>
+    <script>
+        // 主题切换相关代码
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // 显示闪电效果
+            const lightningContainer = document.getElementById('lightning-container');
+            lightningContainer.style.opacity = '1';
+            
+            // 重置闪电动画
+            const lightningPaths = document.querySelectorAll('.lightning-path');
+            lightningPaths.forEach(path => {
+                path.style.animation = 'none';
+                path.offsetHeight; // 触发重排
+                path.style.animation = null;
+            });
+            
+            // 延迟切换主题，让闪电效果先显示
+            setTimeout(() => {
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新主题图标
+                const themeIcons = document.querySelectorAll('.theme-toggle i');
+                themeIcons.forEach(icon => {
+                    if (newTheme === 'dark') {
+                        icon.classList.remove('fa-moon');
+                        icon.classList.add('fa-sun');
+                    } else {
+                        icon.classList.remove('fa-sun');
+                        icon.classList.add('fa-moon');
+                    }
+                });
+                
+                // 显示主题切换通知
+                showNotification(newTheme === 'dark' ? '已切换到深色模式' : '已切换到浅色模式');
+                
+                // 隐藏闪电效果
+                setTimeout(() => {
+                    lightningContainer.style.opacity = '0';
+                }, 2000);
+            }, 100);
+        }
+
+        // 通知系统
+        function showNotification(message, duration = 2000) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full text-sm z-[9999] transition-all duration-300';
+            notification.style.backgroundColor = 'var(--bg-card)';
+            notification.style.color = 'var(--text-color)';
+            notification.style.border = '1px solid var(--border-color)';
+            notification.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            notification.innerText = message;
+            
+            document.body.appendChild(notification);
+            
+            // 确保元素已添加到DOM后再添加opacity过渡效果
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 10);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, duration);
+        }
+
+        // 初始化主题
+        function initTheme() {
+            let theme = localStorage.getItem('theme');
+            
+            if (!theme) {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const currentHour = new Date().getHours();
+                const isNight = currentHour < 6 || currentHour >= 18;
+                
+                theme = prefersDark || isNight ? 'dark' : 'light';
+                localStorage.setItem('theme', theme);
+            }
+            
+            document.documentElement.setAttribute('data-theme', theme);
+            
+            // 更新主题图标
+            const themeIcons = document.querySelectorAll('.theme-toggle i');
+            themeIcons.forEach(icon => {
+                if (theme === 'dark') {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+        }
+
+        // 初始化主题
+        initTheme();
+
+        // 移除底部导航栏的显示/隐藏逻辑，使其始终可见
+        const bottomNav = document.getElementById('bottom-nav');
+        bottomNav.style.transform = 'translateY(0)'; // 确保导航栏始终可见
+        
+        // 返回顶部按钮功能
+        document.getElementById('back-to-top').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 微信号复制功能
+        document.getElementById('copy-wechat').addEventListener('click', function() {
+            const wechatId = "378778778";
+            navigator.clipboard.writeText(wechatId).then(function() {
+                showNotification('微信号已复制: ' + wechatId);
+            }).catch(function(err) {
+                console.error('复制微信号失败: ', err);
+                // 兼容性处理
+                const textarea = document.createElement('textarea');
+                textarea.value = wechatId;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showNotification('微信号已复制: ' + wechatId);
+            });
+        });
+
+        // 51.la统计代码
+        (function() {
+            const LA51_SCRIPT_URL = '//js.users.51.la/21480329.js';
+            
+            const script = document.createElement('script');
+            script.src = LA51_SCRIPT_URL;
+            script.async = true;
+            script.onerror = function() {
+                console.log('51.la统计加载失败');
+            };
+            
+            document.body.appendChild(script);
+        })();
+    </script>
+    
+    <!-- Logo切换脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Since we're now using text instead of logo images, 
+            // this script is no longer needed but we'll keep it 
+            // to avoid breaking any references to it elsewhere
+        });
+    </script>
+</body>
+</html> 

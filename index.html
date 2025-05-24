@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en" style="box-sizing: border-box; overflow-x: hidden;">
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="John Doe">
+<meta name="generator" content="Hexo">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/favicon.ico"> 
+<!-- Theme meta tag -->
+<meta name="color-scheme" content="light dark">
+<title>AEROSPACEKID</title>
+<!-- Theme Style -->
+
+<link rel="stylesheet" href="/css/style.css">
+
+<!-- Logo CSS removed as we're now using text instead of images -->
+
+<!-- Open Graph 协议 -->
+<meta property="og:title" content="AEROSPACEKID">
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://example.com">
+<meta property="og:description" content=""> 
+    <!-- Theme detection script - must be first -->
+    <script>
+        (function() {
+            // Function to check if current time is between 7am and 8pm
+            function isDayTime() {
+                const hour = new Date().getHours();
+                return hour >= 7 && hour < 20; // 7am to 8pm
+            }
+            
+            // Get theme from localStorage or use auto based on time
+            const savedThemePreference = localStorage.getItem('themePreference') || 'auto';
+            
+            // If auto preference or no preference saved, set theme based on time
+            if (savedThemePreference === 'auto') {
+                const autoTheme = isDayTime() ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', autoTheme);
+                localStorage.setItem('theme', autoTheme);
+            } else {
+                // Use the saved theme if user has manually set a preference
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+        })();
+    </script>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <!-- Font Awesome via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* 全局盒模型规则 */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* 基础颜色变量 */
+            --bg-color: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-color: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --highlight-color: var(--custom-blue);
+            --highlight-color-rgb: 0, 102, 204; /* Deep Blue */
+            --accent-color: var(--custom-red);
+            --accent-color-rgb: 220, 38, 38; /* Rose Red */
+            --custom-blue: #0066cc; /* Deep Blue */
+            --custom-red: #dc2626; /* Rose Red */
+            --icon-color: var(--highlight-color);
+            --tech-bg: rgba(var(--highlight-color-rgb), 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-color: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --highlight-color-rgb: 0, 102, 204; /* Deep Blue */
+            --accent-color-rgb: 220, 38, 38; /* Rose Red */
+            --icon-color: #ffffff;
+            --tech-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 闪电效果样式 */
+        #lightning-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightning-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .lightning-path {
+            stroke: var(--accent-color);
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            opacity: 0.8;
+        }
+
+        .lightning-1 {
+            animation: lightning 2s linear forwards;
+            animation-delay: 0.1s;
+        }
+
+        .lightning-2 {
+            animation: lightning 2s linear forwards;
+            animation-delay: 0.2s;
+        }
+
+        .lightning-3 {
+            animation: lightning 2s linear forwards;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes lightning {
+            0% {
+                stroke-dashoffset: 500;
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            20% {
+                stroke-dashoffset: 0;
+            }
+            60% {
+                opacity: 0.8;
+            }
+            100% {
+                stroke-dashoffset: 0;
+                opacity: 0;
+            }
+        }
+
+        /* 页面过渡效果 */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 导航栏样式 */
+        .nav-bg {
+            background-color: var(--bg-card);
+            border-color: var(--border-color);
+        }
+
+        /* Logo 动画 */
+        .logo-text {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .logo-letter {
+            display: inline-block;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        a:hover .logo-letter {
+            color: var(--highlight-color);
+            transform: translateY(-2px);
+            transition-delay: calc(var(--index) * 0.05s);
+        }
+
+        /* 高亮文本 */
+        .text-highlight {
+            color: var(--icon-color);
+        }
+
+        /* 链接高亮效果 */
+        .highlight-hover-text {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .highlight-hover-text:hover {
+            color: var(--highlight-color);
+        }
+
+        /* 主题切换图标 */
+        .theme-toggle i {
+            transition: transform 0.5s ease;
+        }
+
+        .theme-toggle:hover i {
+            transform: rotate(180deg);
+        }
+
+        /* 加载动画 */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(var(--highlight-color-rgb), 0.3);
+            border-radius: 50%;
+            border-top-color: var(--highlight-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--text-secondary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--text-color);
+        }
+
+        /* iOS Safari specific CSS */
+        @supports (-webkit-touch-callout: none) {
+            .min-h-screen {
+                min-height: -webkit-fill-available;
+            }
+        }
+        
+        /* TikTok-style flashing effect for logo text */
+        .logo-text {
+            position: relative;
+            display: inline-block;
+            letter-spacing: -1px; /* Even tighter letter spacing */
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+        }
+        
+        .logo-letter {
+            display: inline-block;
+            position: relative;
+            transition: color 0.1s ease; /* Faster transition for sharper effect */
+            margin: 0;
+            padding: 0;
+        }
+        
+        @keyframes tiktokFlash {
+            0%, 100% {
+                color: var(--text-primary);
+                text-shadow: none;
+                transform: scale(1);
+            }
+            10% { /* Shorter flash duration */
+                color: var(--highlight-color);
+                text-shadow: 0 0 10px var(--highlight-color);
+                transform: scale(1.05); /* Subtle scale effect */
+            }
+        }
+        
+        /* Apply animation with different delays to create the sequential effect */
+        .logo-letter:nth-child(1) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.0s; }
+        .logo-letter:nth-child(2) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.15s; }
+        .logo-letter:nth-child(3) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.3s; }
+        .logo-letter:nth-child(4) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.45s; }
+        .logo-letter:nth-child(5) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.6s; }
+        .logo-letter:nth-child(6) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.75s; }
+        .logo-letter:nth-child(7) { animation: tiktokFlash 1.8s infinite; animation-delay: 0.9s; }
+        .logo-letter:nth-child(8) { animation: tiktokFlash 1.8s infinite; animation-delay: 1.05s; }
+        .logo-letter:nth-child(9) { animation: tiktokFlash 1.8s infinite; animation-delay: 1.2s; }
+        .logo-letter:nth-child(10) { animation: tiktokFlash 1.8s infinite; animation-delay: 1.35s; }
+        .logo-letter:nth-child(11) { animation: tiktokFlash 1.8s infinite; animation-delay: 1.5s; }
+
+        /* 深色模式底部导航栏样式 */
+        [data-theme="dark"] [data-theme-switch] {
+            background-color: rgba(0, 0, 0, 0.7) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        
+        [data-theme="dark"] .dark-mode-icon {
+            color: white !important;
+        }
+        
+        [data-theme="dark"] .dark-mode-divider {
+            background-color: rgba(255, 255, 255, 0.3) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+    <!-- Page transition overlay -->
+    <div id="page-transition-overlay" class="fixed inset-0 z-[9999] pointer-events-none flex items-center justify-center transition-opacity duration-300" style="background-color: var(--bg-color); opacity: 0;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- 底部悬浮导航栏 -->
+    <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center items-center p-4" id="bottom-nav">
+        <div class="flex items-center gap-3 px-6 py-3 shadow-lg rounded-full backdrop-blur-md" style="background-color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0, 0, 0, 0.1);" data-theme-switch>
+            <a href="/" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-800 dark-mode-icon">
+                <i class="fas fa-home"></i>
+            </a>
+            <a target="_blank" rel="noopener" href="https://719520.xyz" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-800 dark-mode-icon">
+                <i class="fas fa-archive"></i>
+            </a>
+            <button id="copy-wechat" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-800 dark-mode-icon bg-transparent border-0">
+                <i class="fab fa-weixin"></i>
+            </button>
+            
+            <div class="mx-1 h-5 w-px bg-gray-300 dark-mode-divider"></div>
+            
+            <button onclick="toggleTheme()" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-800 dark-mode-icon theme-toggle bg-transparent border-0">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button id="back-to-top" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-800 dark-mode-icon bg-transparent border-0">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 闪电效果容器 -->
+    <div id="lightning-container" class="fixed inset-0 pointer-events-none z-[9998]" style="opacity: 0;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" class="lightning-svg">
+            <path class="lightning-path lightning-1" d="M300,20 L290,100 L320,110 L280,220 L310,140 L270,130 L300,20" fill="none" stroke-width="3" stroke-linecap="round" />
+            <path class="lightning-path lightning-2" d="M500,50 L480,130 L510,140 L460,250 L490,160 L450,150 L500,50" fill="none" stroke-width="3" stroke-linecap="round" />
+            <path class="lightning-path lightning-3" d="M150,80 L170,140 L140,150 L190,250 L165,170 L195,160 L150,80" fill="none" stroke-width="2" stroke-linecap="round" />
+        </svg>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="flex-grow container mx-auto px-4 pb-4 md:px-8 md:pb-8" style="margin-top: 20px;">
+        <!-- 个人信息容器 -->
+<style>
+/* 自定义主题配色 - 深蓝色作为主色调，玫红色作为辅助色 */
+:root {
+    --custom-blue: #1e2952;
+    --custom-red: #b91e47;
+}
+
+:root[data-theme="light"] {
+    --highlight-color: var(--custom-blue);
+    --highlight-hover: #162044;
+    --accent-color: var(--custom-red);
+    --highlight-color-rgb: 30, 41, 82; /* RGB值对应#1e2952 */
+    --icon-color: var(--custom-blue);
+    --tech-bg: rgba(30, 41, 82, 0.1);
+}
+
+:root[data-theme="dark"] {
+    --highlight-color: var(--custom-blue);
+    --highlight-hover: #2a3a70;
+    --accent-color: var(--custom-red);
+    --highlight-color-rgb: 30, 41, 82; /* RGB值对应#1e2952 */
+    --icon-color: #ffffff; /* 深色模式下图标使用白色 */
+    --tech-bg: rgba(255, 255, 255, 0.1); /* 深色模式下技术标签背景 */
+}
+
+/* 应用新配色到特定元素 */
+.text-highlight {
+    color: var(--icon-color) !important;
+}
+
+h3 i.text-highlight {
+    color: var(--icon-color) !important;
+}
+
+.banner-title-accent {
+    color: var(--custom-blue);
+}
+
+/* 卡片默认不显示网格效果 */
+#bento-grid .card .card-pattern {
+    opacity: 0 !important;
+    transition: opacity 0.3s ease;
+}
+/* 只有当前悬停的卡片才显示网格效果 */
+#bento-grid .card:hover .card-pattern {
+    opacity: 1 !important;
+}
+/* 确保卡片在非悬停状态下不显示边框效果 */
+#bento-grid .card:not(:hover) .card-border {
+    opacity: 0 !important;
+}
+/* 确保卡片在非悬停状态下不显示阴影和位移效果 */
+#bento-grid .card:not(:hover) {
+    box-shadow: none !important;
+    transform: translateY(0) !important;
+    background-color: var(--card-bg);
+}
+
+/* 不同文章卡片的图标颜色 */
+.card[data-index="0"] .icon-wrapper i { color: var(--icon-color); }
+.card[data-index="1"] .icon-wrapper i { color: var(--custom-red); }
+.card[data-index="2"] .icon-wrapper i { color: var(--icon-color); }
+.card[data-index="3"] .icon-wrapper i { color: var(--custom-red); }
+.card[data-index="4"] .icon-wrapper i { color: var(--icon-color); }
+.card[data-index="5"] .icon-wrapper i { color: var(--custom-red); }
+.card[data-index="6"] .icon-wrapper i { color: var(--icon-color); }
+
+/* 桌面端图片位置固定 - 无论宽度如何变化 */
+.banner-bg-image {
+    opacity: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+    padding: 15px;
+}
+
+.banner-bg-image img {
+    max-width: 100%;
+    max-height: 230px;
+    object-fit: contain;
+}
+
+/* 只有在真正的移动设备上才应用不同的样式 */
+@media (max-width: 768px) {
+    .banner-bg-image {
+        display: none;
+    }
+}
+</style>
+<!-- 博客 Banner -->
+<div class="w-full relative overflow-hidden" style="height: 260px; margin-bottom: 40px;">
+    <!-- Banner 内容 - 5:5布局 -->
+    <div class="w-full h-full relative">
+        <div class="container mx-auto max-w-6xl h-full">
+            <div class="grid grid-cols-1 md:grid-cols-2 h-full">
+                <!-- 左侧 - 个人信息 (5/10) -->
+                <div class="w-full h-full flex items-center relative z-10">
+                    <!-- 个人信息 -->
+                    <div class="w-full text-center md:text-left px-4">
+                        <!-- 文字内容 -->
+                        <div class="w-full">
+                            <!-- 姓名和位置 -->
+                            <div class="mb-2.5">
+                                <!-- 移除作者名称 -->
+                                <!-- 副標題 -->
+                                
+                                
+                                <!-- 项目标题 -->
+                                <div class="flex flex-wrap gap-2 mt-2.5 justify-center md:justify-start">
+                                    <h3 class="text-lg font-bold text-primary">🧰 初级前端整站项目合集 · Web Starter Pack</h3>
+                                </div>
+                            </div>
+                            
+                            <!-- 项目介绍 -->
+                            <div class="mt-2.5 text-xs text-secondary">
+                                <div class="mb-3">
+                                    <p>这是一个专为初学者和前端爱好者准备的前端整站源码集合，涵盖各种常见页面布局和实用功能模块。每个项目均为完整结构、可运行展示，帮助你快速掌握网页搭建的实际技能。</p>
+                                </div>
+                                
+                                <div class="my-3">
+                                    <div class="flex flex-wrap mt-2">
+                                        <div class="w-full mb-1">• 🌐 个人主页（简约风 / 极客风 / 图标导航式）</div>
+                                        <div class="w-full mb-1">• 📄 博客模板（单栏 / 双栏 / 布局切换）</div>
+                                        <div class="w-full mb-1">• 🛍️ 商业页面（登录页 / 注册页 / 商品卡片 / 价格页）</div>
+                                        <div class="w-full mb-1">• 📰 响应式新闻列表</div>
+                                        <div class="w-full mb-1">• 🎨 UI 风格页面（玻璃拟态 / 暗黑模式 / Neumorphism）</div>
+                                        <div class="w-full mb-1">• 📱 移动优先小页面（App 启动页 / H5 活动页）</div>
+                                        <div class="w-full mb-1">• 💼 简历 / Portfolio 模板</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧 - 图片 (5/10) -->
+                <div class="hidden md:flex items-center justify-center h-full">
+                    <div class="banner-bg-image">
+                        <img src="https://cab0110.webp.li/PicGO/20250524194558015.png" alt="Background Image" class="object-contain" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Banner 底部线条装饰 -->
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden" style="height: 4px;">
+        <!-- 渐变线条 -->
+        <div class="w-full h-full" style="background: linear-gradient(90deg, var(--custom-blue) 0%, var(--custom-blue) 70%, var(--custom-red) 100%);"></div>
+    </div>
+</div>
+
+<!-- 分类区域 -->
+<section id="categories" class="my-4 md:my-6 scroll-mt-20 mb-16 md:mb-6" style="margin-top: 20px;">
+    <!-- 移除了显示站点标题的部分 -->
+</section>
+
+
+<script src="/js/site-health.js"></script>
+ 
+    </div>
+
+    <!-- 页脚 - 添加底部padding以避免内容被导航栏遮挡 -->
+    <footer class="py-6 pb-20 border-t mt-8" style="border-color: var(--border-color);">
+        <div class="container mx-auto px-4 flex flex-col items-center">
+            <p class="text-center text-sm text-secondary mb-1">
+                &copy; 2025 Rick's Blog. Powered by Hexo&Rick
+            </p>
+        </div>
+    </footer>
+
+    <!-- 主題切換通知容器 - 預先創建 -->
+    <div id="theme-notification" class="fixed opacity-0 transition-opacity duration-300" style="bottom: 100px; right: 20px; padding: 8px 16px; border-radius: 4px; z-index: 9999; font-size: 14px; display: none;"></div>
+    
+    <!-- Custom JS -->
+    <script src="/js/script.js" defer></script>
+    <script>
+        // 主题切换相关代码
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // 显示闪电效果
+            const lightningContainer = document.getElementById('lightning-container');
+            lightningContainer.style.opacity = '1';
+            
+            // 重置闪电动画
+            const lightningPaths = document.querySelectorAll('.lightning-path');
+            lightningPaths.forEach(path => {
+                path.style.animation = 'none';
+                path.offsetHeight; // 触发重排
+                path.style.animation = null;
+            });
+            
+            // 延迟切换主题，让闪电效果先显示
+            setTimeout(() => {
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新主题图标
+                const themeIcons = document.querySelectorAll('.theme-toggle i');
+                themeIcons.forEach(icon => {
+                    if (newTheme === 'dark') {
+                        icon.classList.remove('fa-moon');
+                        icon.classList.add('fa-sun');
+                    } else {
+                        icon.classList.remove('fa-sun');
+                        icon.classList.add('fa-moon');
+                    }
+                });
+                
+                // 显示主题切换通知
+                showNotification(newTheme === 'dark' ? '已切换到深色模式' : '已切换到浅色模式');
+                
+                // 隐藏闪电效果
+                setTimeout(() => {
+                    lightningContainer.style.opacity = '0';
+                }, 2000);
+            }, 100);
+        }
+
+        // 通知系统
+        function showNotification(message, duration = 2000) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full text-sm z-[9999] transition-all duration-300';
+            notification.style.backgroundColor = 'var(--bg-card)';
+            notification.style.color = 'var(--text-color)';
+            notification.style.border = '1px solid var(--border-color)';
+            notification.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            notification.innerText = message;
+            
+            document.body.appendChild(notification);
+            
+            // 确保元素已添加到DOM后再添加opacity过渡效果
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 10);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, duration);
+        }
+
+        // 初始化主题
+        function initTheme() {
+            let theme = localStorage.getItem('theme');
+            
+            if (!theme) {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const currentHour = new Date().getHours();
+                const isNight = currentHour < 6 || currentHour >= 18;
+                
+                theme = prefersDark || isNight ? 'dark' : 'light';
+                localStorage.setItem('theme', theme);
+            }
+            
+            document.documentElement.setAttribute('data-theme', theme);
+            
+            // 更新主题图标
+            const themeIcons = document.querySelectorAll('.theme-toggle i');
+            themeIcons.forEach(icon => {
+                if (theme === 'dark') {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+        }
+
+        // 初始化主题
+        initTheme();
+
+        // 移除底部导航栏的显示/隐藏逻辑，使其始终可见
+        const bottomNav = document.getElementById('bottom-nav');
+        bottomNav.style.transform = 'translateY(0)'; // 确保导航栏始终可见
+        
+        // 返回顶部按钮功能
+        document.getElementById('back-to-top').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 微信号复制功能
+        document.getElementById('copy-wechat').addEventListener('click', function() {
+            const wechatId = "378778778";
+            navigator.clipboard.writeText(wechatId).then(function() {
+                showNotification('微信号已复制: ' + wechatId);
+            }).catch(function(err) {
+                console.error('复制微信号失败: ', err);
+                // 兼容性处理
+                const textarea = document.createElement('textarea');
+                textarea.value = wechatId;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showNotification('微信号已复制: ' + wechatId);
+            });
+        });
+
+        // 51.la统计代码
+        (function() {
+            const LA51_SCRIPT_URL = '//js.users.51.la/21480329.js';
+            
+            const script = document.createElement('script');
+            script.src = LA51_SCRIPT_URL;
+            script.async = true;
+            script.onerror = function() {
+                console.log('51.la统计加载失败');
+            };
+            
+            document.body.appendChild(script);
+        })();
+    </script>
+    
+    <!-- Logo切换脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Since we're now using text instead of logo images, 
+            // this script is no longer needed but we'll keep it 
+            // to avoid breaking any references to it elsewhere
+        });
+    </script>
+</body>
+</html> 

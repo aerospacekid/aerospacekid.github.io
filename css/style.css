@@ -1,0 +1,1370 @@
+/* 主题变量定义 */
+:root {
+    /* 浅色模式变量 */
+    color-scheme: light;
+    --bg-color: #ffffff;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --text-secondary: #6c757d;
+    --border-color: #e0e0e0;
+    --highlight-color: #64748B;
+    --highlight-hover: #556270;
+    --nav-bg: rgba(255, 255, 255, 0.9);
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --code-bg: #f8f8f8;
+    --bg-primary: #ffffff;
+    --bg-secondary: transparent;
+    --text-primary: #333333;
+    --highlight-color-rgb: 100, 116, 139;
+    --card-border: rgba(0, 0, 0, 0.05);
+    --shadow-color: rgba(0, 0, 0, 0);
+    --nav-height: 64px;
+    --code-block-bg: #f8f8f8;
+    --code-block-border: rgba(0, 0, 0, 0.1);
+    --code-keyword-color: #0550AE;
+    --code-string-color: #0A7D33;
+    --code-comment-color: #6B7280;
+    --code-function-color: #8250DF;
+    --code-variable-color: #953800;
+    --code-operator-color: #0550AE;
+    --tech-item-bg: transparent;
+    --project-item-bg: transparent;
+    --stat-item-bg: transparent;
+    --stat-icon-bg: rgba(100, 116, 139, 0.08);
+    --status-bar-bg: transparent;
+    --status-bar-border: rgba(0, 0, 0, 0.05);
+    --lightning-color: rgba(0, 0, 0, 0.03);
+    --lightning-shadow: rgba(0, 0, 0, 0.01);
+}
+
+:root[data-theme="dark"] {
+    /* 深色模式变量 */
+    color-scheme: dark;
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #f0f0f0;
+    --text-secondary: #b0b0b0;
+    --border-color: #2a2a2a;
+    --highlight-color: #64748B;
+    --highlight-hover: #7b8ba7;
+    --nav-bg: rgba(18, 18, 18, 0.9);
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    --code-bg: #2a2a2a;
+    --bg-primary: #000000;
+    --bg-secondary: transparent;
+    --text-primary: #ffffff;
+    --highlight-color-rgb: 100, 116, 139;
+    --card-border: rgba(255, 255, 255, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --nav-height: 64px;
+    --code-block-bg: #1e1e1e;
+    --code-block-border: rgba(255, 255, 255, 0.1);
+    --code-keyword-color: #79C0FF;
+    --code-string-color: #7EE787;
+    --code-comment-color: #8B949E;
+    --code-function-color: #D2A8FF;
+    --code-variable-color: #FFA657;
+    --code-operator-color: #79C0FF;
+    --tech-item-bg: rgba(100, 116, 139, 0.05);
+    --project-item-bg: rgba(100, 116, 139, 0.05);
+    --stat-item-bg: rgba(100, 116, 139, 0.02);
+    --stat-icon-bg: rgba(100, 116, 139, 0.1);
+    --status-bar-bg: rgba(100, 116, 139, 0.05);
+    --status-bar-border: rgba(100, 116, 139, 0.1);
+    --lightning-color: rgba(255, 255, 255, 0.03);
+    --lightning-shadow: rgba(255, 255, 255, 0.01);
+}
+
+/* 基础样式 */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    position: relative;
+}
+
+/* 闪电容器样式 */
+#lightning-container {
+    position: fixed;
+    top: 200px;
+    right: 30px;
+    width: 250px;
+    height: 250px;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.lightning-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.lightning-path {
+    stroke: rgba(100, 116, 139, 0.7);
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    opacity: 0;
+}
+
+:root[data-theme="dark"] .lightning-path {
+    stroke: rgba(255, 255, 255, 0.7);
+}
+
+/* 调整闪电路径的位置 */
+.lightning-1 {
+    animation: lightning-flash 5s linear infinite;
+    animation-delay: 1.5s;
+    transform: scale(0.5) translate(-50%, -50%);
+}
+
+.lightning-2 {
+    animation: lightning-flash 7s linear infinite;
+    animation-delay: 3s;
+    transform: scale(0.5) translate(-20%, -20%);
+}
+
+.lightning-3 {
+    animation: lightning-flash 6s linear infinite;
+    animation-delay: 5s;
+    transform: scale(0.5) translate(-30%, -30%);
+}
+
+@keyframes lightning-flash {
+    0%, 100% {
+        opacity: 0;
+        stroke-dashoffset: 1000;
+    }
+    0.5%, 0.7% {
+        opacity: 0.8;
+        stroke-dashoffset: 0;
+    }
+    1%, 99% {
+        opacity: 0;
+        stroke-dashoffset: 0;
+    }
+}
+
+main {
+    padding-top: calc(var(--nav-height) + 16px) !important;
+}
+
+/* 限制过渡效果范围，提高性能 */
+a, button, .card, .nav-bg, .text-highlight, .title-effect,
+.highlight-hover-text, .highlight-hover-text-dropdown, 
+.pagination-item, .tag, .category, .button,
+#back-to-top, .theme-toggle, .fade-in {
+    transition: background-color 0.3s ease, 
+               color 0.3s ease, 
+               border-color 0.3s ease,
+               box-shadow 0.3s ease,
+               transform 0.3s ease,
+               opacity 0.3s ease;
+}
+
+/* 辅助类 */
+.text-primary {
+    color: var(--text-color);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.bg-primary {
+    background-color: var(--bg-primary);
+}
+
+.bg-secondary {
+    background-color: var(--bg-secondary);
+}
+
+.nav-bg {
+    background-color: var(--nav-bg);
+    backdrop-filter: blur(8px);
+    border-color: var(--card-border);
+}
+
+/* 确保导航栏文字颜色一致 */
+nav a, 
+nav .text-primary {
+    color: var(--highlight-color) !important;
+    text-shadow: 0 0 1px rgba(0,0,0,0.1);
+}
+
+/* 通用样式 */
+.text-highlight, .hover\:text-highlight:hover {
+    color: var(--highlight-color);
+}
+
+/* 闪光效果 */
+.shine-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.shine-effect::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+    );
+    transform: rotateZ(60deg);
+    animation: shine 3s infinite linear;
+}
+
+@keyframes shine {
+    0% {
+        transform: translateX(-100%) rotateZ(45deg);
+    }
+    100% {
+        transform: translateX(100%) rotateZ(45deg);
+    }
+}
+
+/* 动画效果 */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 技能进度条 */
+.skill-radar-progress-bar {
+    height: 6px;
+    width: 100%;
+    background-color: rgba(var(--highlight-color-rgb), 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.skill-radar-progress-fill {
+    height: 100%;
+    background-color: var(--highlight-color);
+    border-radius: 3px;
+    transform-origin: left;
+    animation: skillBarFill 1.5s ease forwards;
+    width: 0;
+}
+
+@keyframes skillBarFill {
+    to {
+        width: var(--skill-percentage, 0%);
+    }
+}
+
+.radar-chart-animation {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 链接样式 */
+a {
+    transition: color 0.2s ease;
+}
+
+/* 高亮文本悬停效果 */
+.highlight-hover-text {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.highlight-hover-text::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--highlight-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.highlight-hover-text:hover {
+    color: var(--highlight-color);
+}
+
+.highlight-hover-text:hover::after {
+    transform: scaleX(1);
+}
+
+/* 桌面端二级菜单下划线效果 */
+.highlight-hover-text-dropdown {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.highlight-hover-text-dropdown::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background-color: var(--highlight-color);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.highlight-hover-text-dropdown:hover {
+    color: var(--highlight-color);
+}
+
+.highlight-hover-text-dropdown:hover::after {
+    transform: scaleX(1);
+}
+
+/* 文章目录样式 */
+.toc-content ol {
+    list-style: none;
+    padding-left: 0;
+}
+
+.toc-content > ol {
+    padding-left: 0;
+}
+
+.toc-content ol ol {
+    padding-left: 1rem;
+    border-left: 1px solid var(--card-border);
+    margin: 0.5rem 0 0.5rem 0.5rem;
+}
+
+.toc-content a {
+    text-decoration: none;
+    display: block;
+    padding: 0.25rem 0;
+    margin: 0.25rem 0;
+    border-radius: 0.25rem;
+    transition: color 0.2s ease;
+    color: var(--text-secondary);
+}
+
+.toc-content a:hover {
+    color: var(--highlight-color) !important;
+}
+
+/* 文章内容样式 */
+.prose {
+    color: var(--text-color);
+    max-width: 100%;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    color: var(--text-color);
+    scroll-margin-top: calc(var(--nav-height) + 1rem);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.prose p, .prose ul, .prose ol, .prose blockquote {
+    color: var(--text-color);
+    margin-bottom: 1em;
+}
+
+.prose strong {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.prose em {
+    color: var(--text-color);
+}
+
+.prose blockquote {
+    border-left: 4px solid var(--highlight-color);
+    padding-left: 1em;
+    font-style: italic;
+    color: var(--text-secondary);
+    background-color: var(--card-bg);
+    border-radius: 0.25em;
+    padding: 1em;
+}
+
+.prose blockquote p {
+    color: var(--text-secondary);
+}
+
+.prose a {
+    color: var(--highlight-color);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.prose a:hover {
+    opacity: 0.8;
+}
+
+.prose code {
+    background-color: var(--code-bg);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    color: var(--text-color);
+    transition: none;
+}
+
+.prose pre {
+    background-color: var(--code-bg);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+    transition: none;
+}
+
+.prose pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    color: var(--text-color);
+}
+
+.prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5em;
+}
+
+.prose hr {
+    border: 0;
+    border-top: 1px solid var(--card-border);
+    margin: 2em 0;
+}
+
+/* 表格样式 */
+.prose table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.5rem 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+.prose table th,
+.prose table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.prose table th {
+    background-color: var(--card-bg);
+    font-weight: 600;
+}
+
+.prose table tr:last-child td {
+    border-bottom: none;
+}
+
+.prose table tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme='dark'] tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 列表样式 */
+.prose ul, .prose ol {
+    padding-left: 1.5em;
+}
+
+.prose li {
+    margin-bottom: 0.5em;
+    color: var(--text-color);
+}
+
+.prose li > ul, .prose li > ol {
+    margin-top: 0.5em;
+    margin-bottom: 0;
+}
+
+/* 代码块语法高亮 */
+figure.highlight {
+    background-color: transparent !important;
+    border: none !important;
+    margin: 1.5em 0 !important;
+    padding: 0 !important;
+    overflow: auto !important;
+}
+
+figure.highlight .gutter {
+    display: none !important;
+}
+
+figure.highlight .code {
+    padding: 0 !important;
+}
+
+/* 代码语法高亮颜色 */
+figure.highlight .keyword,
+figure.highlight .function,
+figure.highlight .class {
+    color: var(--code-keyword-color) !important;
+    font-weight: 600 !important;
+}
+
+figure.highlight .string,
+figure.highlight .regexp {
+    color: var(--code-string-color) !important;
+}
+
+figure.highlight .comment {
+    color: var(--code-comment-color) !important;
+    font-style: italic !important;
+}
+
+figure.highlight .number,
+figure.highlight .literal {
+    color: var(--code-variable-color) !important;
+}
+
+figure.highlight .operator,
+figure.highlight .punctuation {
+    color: var(--code-operator-color) !important;
+}
+
+/* 确保代码块内的所有文本都有足够的对比度 */
+figure.highlight * {
+    color: var(--text-primary) !important;
+}
+
+figure.highlight .line {
+    min-height: 1.5em !important;
+    line-height: 1.5em !important;
+}
+
+/* 代码块的滚动条样式 */
+figure.highlight::-webkit-scrollbar {
+    height: 8px !important;
+    width: 8px !important;
+}
+
+figure.highlight::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+figure.highlight::-webkit-scrollbar-thumb {
+    background-color: var(--text-secondary) !important;
+    border-radius: 4px !important;
+}
+
+/* 移除所有代码块相关的背景和边框 */
+pre, code, figure.highlight, figure.highlight td.code {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
+/* 移除代码块底部边框和阴影 */
+figure.highlight::after,
+figure.highlight::before,
+pre::after,
+pre::before,
+figure.highlight > *::after,
+figure.highlight > *::before {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-bottom: none !important;
+}
+
+/* 去除HTML代码块中标签的边框和容器样式 */
+figure.highlight.html .tag,
+figure.highlight.xml .tag,
+figure.highlight .code span.tag,
+figure.highlight .code .name,
+figure.highlight .code span.attr,
+figure.highlight .code .attr,
+figure.highlight .code span.string {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    display: inline !important;
+    margin: 0 !important;
+    box-sizing: content-box !important;
+}
+
+/* 修复HTML代码块的布局 */
+figure.highlight.html pre,
+figure.highlight.xml pre,
+figure.highlight .code pre {
+    display: block !important;
+    white-space: pre !important;
+    overflow-x: auto !important;
+    word-wrap: normal !important;
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .md\:hidden {
+        display: block !important;
+    }
+    
+    /* 标题和内容的间距控制 */
+    .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+        line-height: 1.3;
+    }
+    
+    /* 首页文章卡片样式优化 */
+    .post-card {
+        padding: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    /* 首页布局调整 */
+    .container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    /* 文章内容在手机上的显示 */
+    .prose {
+        font-size: 1rem;
+        line-height: 1.6;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    /* 代码相关展示优化 */
+    pre, .prose pre, code, .prose code, figure.highlight pre, figure.highlight code,
+    figure.highlight.html pre, figure.highlight.xml pre, figure.highlight .code pre {
+        padding: 0.75rem !important;
+        margin: 1rem 0 !important;
+        font-size: 0.85rem !important;
+        overflow-x: auto;
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+        word-break: break-word !important;
+    }
+    
+    /* 图片在手机上的显示 */
+    .prose img, img {
+        margin: 1rem auto !important;
+    }
+    
+    /* 导航栏在手机上的高度 */
+    nav {
+        padding: 0.5rem 0 !important;
+    }
+    
+    /* 移动端菜单项样式统一 */
+    #mobile-menu, #mobile-menu > div {
+        border-color: var(--border-color);
+    }
+    
+    #mobile-menu a {
+        padding: 0.75rem 1rem !important;
+        border-bottom: 1px solid var(--border-color);
+        margin: 0 !important;
+    }
+    
+    #mobile-menu button {
+        padding: 0.75rem 1rem !important;
+    }
+    
+    /* 表格在手机上的显示 */
+    .prose table, table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    /* 标题文字大小调整 */
+    .text-2xl {
+        font-size: 1.25rem !important;
+    }
+    
+    /* 页脚在手机上的显示 */
+    footer {
+        padding: 1.5rem 1rem !important;
+    }
+    
+    /* 闪电效果容器调整 */
+    #lightning-container {
+        top: 350px;
+        right: 10px;
+        width: 150px;
+        height: 150px;
+    }
+    
+    /* 修复长内容自动换行 */
+    .prose p, .prose li, .prose blockquote {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        word-break: break-word !important;
+    }
+    
+    /* 代码高亮块适配 */
+    figure.highlight {
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+    
+    figure.highlight td.code {
+        word-break: break-word !important;
+    }
+}
+
+/* 媒体查询：超小屏幕 */
+@media (max-width: 375px) {
+    .prose {
+        font-size: 0.95rem !important;
+    }
+    
+    .post-card {
+        padding: 0.75rem !important;
+    }
+}
+
+/* 标题特效 */
+.title-effect {
+    position: relative;
+    display: inline-block;
+    color: var(--text-color);
+    transition: color 0.3s;
+}
+
+.title-effect::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--highlight-color);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s;
+}
+
+.title-effect:hover {
+    color: var(--highlight-color);
+}
+
+.title-effect:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* 卡片样式 */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* 修改卡片悬停效果，但保留文章卡片的悬停效果 */
+.bento-grid .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    border-color: var(--highlight-color);
+}
+
+/* 首页大容器不应用悬停效果 */
+section.card:hover {
+    transform: none;
+    box-shadow: var(--card-shadow);
+    border-color: var(--border-color);
+}
+
+/* 分页样式 */
+.pagination-item {
+    color: var(--text-color);
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.pagination-item:hover {
+    color: white;
+    background-color: var(--highlight-color);
+    border-color: var(--highlight-color);
+}
+
+.pagination-item.active {
+    color: white;
+    background-color: var(--highlight-color);
+    border-color: var(--highlight-color);
+}
+
+.pagination-item.disabled {
+    color: var(--text-secondary);
+    pointer-events: none;
+}
+
+/* 标签及分类样式 */
+.tag, .category {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 2rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.tag:hover, .category:hover {
+    background-color: var(--highlight-color);
+    color: white;
+    border-color: var(--highlight-color);
+}
+
+/* 代码样式 */
+code {
+    background-color: var(--code-bg);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    color: var(--text-color);
+    transition: none;
+}
+
+pre {
+    background-color: var(--code-bg);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+    transition: none;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    color: var(--text-color);
+}
+
+/* 引用样式 */
+blockquote {
+    border-left: 4px solid var(--highlight-color);
+    padding-left: 1rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin: 1.5rem 0;
+}
+
+/* 按钮样式 */
+.button {
+    display: inline-block;
+    background-color: var(--highlight-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--highlight-hover);
+}
+
+/* 图片样式 */
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+}
+
+/* 固定按钮组样式 */
+#back-to-top, .theme-toggle {
+    transition: all 0.3s ease;
+}
+
+#back-to-top:hover, .theme-toggle:hover {
+    transform: translateY(-2px);
+}
+
+/* 自定义代码高亮样式 */
+figure.highlight {
+    background-color: var(--code-bg) !important;
+    border-radius: 4px !important;
+    border: none !important;
+    margin: 1.5em 0 !important;
+    overflow: auto !important;
+}
+
+/* 移除文章页面和代码块周围的所有分隔线 */
+.post-content hr,
+article hr,
+.markdown-content hr,
+.post hr,
+.article-entry hr,
+.post-container hr,
+.post-body hr,
+.content hr,
+.article hr,
+.blog-post hr {
+    display: none !important;
+}
+
+/* 移除文章页面中的边框和分隔线 */
+.post-content,
+article,
+.markdown-content,
+.post,
+.article-entry,
+.post-container,
+.post-body,
+.content,
+.article,
+.blog-post {
+    border-top: none !important;
+    border-bottom: none !important;
+}
+
+/* Page transition styles */
+#page-transition-overlay {
+    backdrop-filter: blur(5px);
+    background-color: var(--bg-color) !important;
+    z-index: 99999 !important;
+    transition: opacity 0.4s ease;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(var(--highlight-color-rgb), 0.3);
+    border-top: 5px solid var(--highlight-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* PrismJS 代码高亮样式 */
+pre[class*="language-"],
+code[class*="language-"] {
+    background: transparent;
+    text-shadow: none;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 1em;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    tab-size: 4;
+    hyphens: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+pre[class*="language-"] {
+    overflow: auto;
+    margin: 1.5em 0;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+    background: transparent;
+}
+
+/* 代码颜色主题 */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: var(--code-comment-color);
+    font-style: italic;
+}
+
+.token.namespace {
+    opacity: 0.7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: var(--code-variable-color);
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+    color: var(--code-string-color);
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+    color: var(--code-operator-color);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: var(--code-keyword-color);
+    font-weight: 600;
+}
+
+.token.function,
+.token.class-name {
+    color: var(--code-function-color);
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+    color: var(--code-variable-color);
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+
+.token.italic {
+    font-style: italic;
+}
+
+/* 移除所有旧的代码高亮相关样式 */
+figure.highlight,
+.highlight,
+.gutter,
+.code {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+}
+
+/* 行内代码样式 */
+:not(pre) > code {
+    background-color: transparent;
+    padding: 0.2em 0.4em;
+    font-size: 0.9em;
+    color: var(--code-keyword-color);
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* 滚动条样式 */
+pre[class*="language-"]::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+pre[class*="language-"]::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+pre[class*="language-"]::-webkit-scrollbar-thumb {
+    background-color: var(--text-secondary);
+    border-radius: 4px;
+}
+
+/* 代码块样式优化 */
+pre[class*="language-"] {
+    background: var(--code-block-bg) !important;
+    border: 1px solid var(--code-block-border);
+    border-radius: 8px;
+    margin: 1.5em 0;
+    padding: 1em;
+    overflow: auto;
+    font-size: 0.9em;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+:not(pre) > code[class*="language-"] {
+    background: var(--code-bg);
+    border-radius: 4px;
+    padding: 0.2em 0.4em;
+    font-size: 0.9em;
+    white-space: normal;
+}
+
+/* Token 颜色优化 */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: var(--code-comment-color);
+    font-style: italic;
+}
+
+.token.function {
+    color: var(--code-function-color);
+}
+
+.token.keyword {
+    color: var(--code-keyword-color);
+}
+
+.token.string {
+    color: var(--code-string-color);
+}
+
+.token.operator {
+    color: var(--code-operator-color);
+}
+
+/* 滚动条美化 */
+pre[class*="language-"]::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+pre[class*="language-"]::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+pre[class*="language-"]::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+pre[class*="language-"]::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* 行内代码样式 */
+:not(pre) > code {
+    background: var(--code-bg);
+    color: var(--text-color);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* 移除代码块的所有动画效果 */
+pre, code, pre[class*="language-"], code[class*="language-"],
+figure.highlight, .highlight, .gutter, .code,
+:not(pre) > code[class*="language-"],
+:not(pre) > code,
+.prose pre,
+.prose code {
+    transition: none !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 确保代码块内容可读性 */
+.prose pre,
+pre[class*="language-"] {
+    margin: 1.5em 0;
+    padding: 1em;
+    overflow-x: auto;
+    font-size: 0.9em;
+    line-height: 1.6;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    border-radius: 8px;
+    background: var(--code-block-bg) !important;
+}
+
+/* 行内代码样式 */
+:not(pre) > code {
+    padding: 0.2em 0.4em;
+    font-size: 0.9em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    border-radius: 4px;
+    background: var(--code-bg) !important;
+    color: var(--text-color);
+}
+
+/* 移除所有可能的边框和背景 */
+.prose pre code,
+pre code,
+code[class*="language-"],
+.highlight * {
+    background: transparent !important;
+    border: none !important;
+    padding: 0;
+}
+
+/* 移除代码块的所有装饰 */
+figure.highlight::before,
+figure.highlight::after,
+pre::before,
+pre::after {
+    display: none !important;
+}
+
+.prose code:hover,
+code:hover,
+pre:hover,
+pre code:hover,
+figure.highlight:hover,
+.highlight:hover {
+    background-color: var(--code-bg) !important;
+}
+
+/* 代码块基本样式 */
+pre[class*="language-"],
+.prose pre,
+figure.highlight {
+    margin: 1.5em 0;
+    padding: 1em;
+    overflow-x: auto;
+    font-size: 0.9em;
+    line-height: 1.6;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    border-radius: 8px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 代码内容样式 */
+pre[class*="language-"] code,
+.prose pre code,
+figure.highlight code {
+    background: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: var(--text-color) !important;
+}
+
+/* 行内代码样式 */
+:not(pre) > code {
+    padding: 0.2em 0.4em;
+    font-size: 0.9em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    border-radius: 4px;
+    background: var(--code-bg) !important;
+    color: var(--text-color);
+}
+
+/* 移除所有可能的装饰 */
+figure.highlight::before,
+figure.highlight::after,
+pre::before,
+pre::after,
+code::before,
+code::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* 确保代码颜色正确 */
+.token.keyword,
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+    color: var(--code-keyword-color) !important;
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.regex,
+.token.variable {
+    color: var(--code-string-color) !important;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: var(--code-comment-color) !important;
+    font-style: italic;
+}
+
+/* 移除所有过渡效果 */
+pre, code, pre[class*="language-"], code[class*="language-"],
+figure.highlight, .highlight, .gutter, .code,
+:not(pre) > code[class*="language-"],
+:not(pre) > code,
+.prose pre,
+.prose code {
+    transition: none !important;
+}
+
+/* 移除悬停效果 */
+pre:hover,
+code:hover,
+figure.highlight:hover,
+.highlight:hover {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 文章页面背景颜色 - 在浅色模式下使用卡片背景色 */
+.post-page {
+    background-color: var(--card-bg) !important;
+}
+
+/* 确保深色模式下文章页面保持原来的背景色 */
+:root[data-theme="dark"] .post-page {
+    background-color: var(--bg-color) !important;
+}
+
+/* 文章页面背景颜色 - 在浅色模式下使用卡片背景色 */
+body:has(article .prose) {
+    background-color: var(--card-bg);
+}
+
+/* 确保深色模式下文章页面保持原来的背景色 */
+:root[data-theme="dark"] body:has(article .prose) {
+    background-color: var(--bg-color);
+}
+
+/* 只隐藏移动端的作者卡片 */
+.mobile-author-card {
+    display: none !important;
+} 
